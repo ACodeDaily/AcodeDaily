@@ -33,12 +33,27 @@ The repo contains 3 decoupled components i.e. Interaction has been limited via a
   - ask doubts on the websites these doubts would be converted to forum posts and would be posted on the discord server.
   - search through various doubts based on the tags to pick topics where you can help.
   
+## tech stack to be followed
+  - Front End 
+      - React+ Vite + TS 
+  - Back end 
+      - Node + TS
+  - Infra 
+      - Node + TS + MongoDB 
 
+
+## future scope 
+  - test grpc 
+  - utilise microfrontends, microservices
+  - 
 ## Progress 
   - [x] updating the readme file. 
   - [ ] consensus on the tech stack to be followed
   - [ ] Frontend tasks
-    - [ ] to be populated
+    - [ ] user profile 
+    - [ ] login/signup page
+    - [ ] heatmap (including dev + CP)
+    - [ ] Discussion for the mobile application (Flutter based - to be lead by Prerak)
   - [ ] Backend tasks
     - [ ] to be populated
   - [ ] Infra tasks
