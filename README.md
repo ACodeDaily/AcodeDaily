@@ -45,10 +45,15 @@ The repo contains 3 decoupled components i.e. Interaction has been limited via a
 ## future scope 
   - test grpc 
   - utilise microfrontends, microservices
-  - 
+
+
 ## Progress 
   - [x] updating the readme file. 
-  - [ ] consensus on the tech stack to be followed
+  - [x] consensus on the tech stack to be followed
+  - [x] set boiler plate code 
+  - [ ] figma design
+  - [ ] HLD design 
+  - [ ] LLD design
   - [ ] Frontend tasks
     - [ ] user profile 
     - [ ] login/signup page
@@ -71,17 +76,3 @@ The repo contains 3 decoupled components i.e. Interaction has been limited via a
       - [ ] Atcoder 
     - [ ] discord handle authentication and score fetching 
       - [ ] the discord server score would be a function of individuals help to peers (in both CP and opensource). 
-<!--
-**ACodeDaily/AcodeDaily** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-
-Here are some ideas to get you started:
-
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
