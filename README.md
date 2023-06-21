@@ -21,6 +21,9 @@ The repo contains 3 decoupled components i.e. Interaction has been limited via a
   - To serve both the Competitive programmers as well as the open source specialists. 
   - The platform would host people from the industry to refer people for roles in their respective orgs. 
   - This would give a fair chance to both the CPers and developers.
+  - To develop a platform where the CP and Dev questions can be asked without any hesitation and are resolved ASAP!
+      - Would add the discord CP doubts section here for serving the rich content to non discord audience.
+           
 
 
 ## specific features 
