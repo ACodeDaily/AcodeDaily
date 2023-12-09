@@ -1,0 +1,63 @@
+import { NextFunction, Request, Response } from 'express';
+import { Container } from 'typedi';
+import { {{camel name}} } from '@interfaces/{{name}}.interface';
+import { {{camel name}}Service } from '@services/{{name}}.service';
+
+export class {{camel name}}Controller {
+  public {{name}} = Container.get({{camel name}}Service);
+
+  public get{{camel name}}s = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const findAll{{camel name}}sData: {{camel name}}[] = await this.{{name}}.findAll{{camel name}}();
+
+      res.status(200).json({ data: findAll{{camel name}}sData, message: 'findAll' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public get{{camel name}}ById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const {{name}}Id: string = req.params.id;
+      const findOne{{camel name}}Data: {{camel name}} = await this.{{name}}.find{{camel name}}ById({{name}}Id);
+
+      res.status(200).json({ data: findOne{{camel name}}Data, message: 'findOne' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public create{{camel name}} = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const {{name}}Data: {{camel name}} = req.body;
+      const create{{camel name}}Data: {{camel name}} = await this.{{name}}.create{{camel name}}({{name}}Data);
+
+      res.status(201).json({ data: create{{camel name}}Data, message: 'created' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public update{{camel name}} = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const {{name}}Id: string = req.params.id;
+      const {{name}}Data: {{camel name}} = req.body;
+      const update{{camel name}}Data: {{camel name}} = await this.{{name}}.update{{camel name}}({{name}}Id, {{name}}Data);
+
+      res.status(200).json({ data: update{{camel name}}Data, message: 'updated' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public delete{{camel name}} = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const {{camel name}}Id: string = req.params.id;
+      const delete{{camel name}}Data: {{camel name}} = await this.{{name}}.delete{{camel name}}({{camel name}}Id);
+
+      res.status(200).json({ data: delete{{camel name}}Data, message: 'deleted' });
+    } catch (error) {
+      next(error);
+    }
+  };
+}

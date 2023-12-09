@@ -1,0 +1,23 @@
+import { Router } from 'express';
+import { {{camel name}}Controller } from '@controllers/{{name}}.controller';
+import { Create{{camel name}}Dto } from '@dtos/{{name}}.dto';
+import { Routes } from '@interfaces/routes.interface';
+import { ValidationMiddleware } from '@middlewares/validation.middleware';
+
+export class {{camel name}}Route implements Routes {
+  public path = '/{{name}}';
+  public router = Router();
+  public {{name}} = new {{camel name}}Controller();
+
+  constructor() {
+    this.initializeRoutes();
+  }
+
+  private initializeRoutes() {
+    this.router.get(`${this.path}`, this.{{name}}.get{{camel name}}s);
+    this.router.get(`${this.path}/:id`, this.{{name}}.get{{camel name}}ById);
+    this.router.post(`${this.path}`, ValidationMiddleware(Create{{camel name}}Dto), this.{{name}}.create{{camel name}});
+    this.router.put(`${this.path}/:id`, ValidationMiddleware(Create{{camel name}}Dto, true), this.{{name}}.update{{camel name}});
+    this.router.delete(`${this.path}/:id`, this.{{name}}.delete{{camel name}});
+  }
+}

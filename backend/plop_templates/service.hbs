@@ -1,0 +1,41 @@
+import { Service } from 'typedi';
+import { HttpException } from '@exceptions/HttpException';
+import { {{camel name}}Model } from '@models/{{name}}.model';
+import { {{camel name}} } from '@interfaces/{{name}}.interface';
+
+@Service()
+export class {{camel name}}Service {
+  public async findAll{{camel name}}(): Promise<{{camel name}}[]> {
+    const {{name}}s: {{camel name}}[] = await {{camel name}}Model.find();
+    return {{name}}s;
+  }
+
+  public async find{{camel name}}ById({{name}}Id: string): Promise<{{camel name}}> {
+    const find{{camel name}}: {{camel name}} = await {{camel name}}Model.findOne({ _id: {{name}}Id });
+    if (!find{{camel name}}) throw new HttpException(409, "{{camel name}} doesn't exist");
+
+    return find{{camel name}};
+  }
+
+  public async create{{camel name}}({{name}}Data: {{camel name}}): Promise<{{camel name}}> {
+  
+    const create{{camel name}}Data: {{camel name}} = await {{camel name}}Model.create({ ...{{name}}Data });
+
+    return create{{camel name}}Data;
+  }
+
+  public async update{{camel name}}({{name}}Id: string, {{name}}Data: {{camel name}}): Promise<{{camel name}}> {
+
+    const update{{camel name}}ById: {{camel name}} = await {{camel name}}Model.findByIdAndUpdate({{name}}Id, { {{name}}Data });
+    if (!update{{camel name}}ById) throw new HttpException(409, "{{camel name}} doesn't exist");
+
+    return update{{camel name}}ById;
+  }
+
+  public async delete{{camel name}}({{name}}Id: string): Promise<{{camel name}}> {
+    const delete{{camel name}}ById: {{camel name}} = await {{camel name}}Model.findByIdAndDelete({{name}}Id);
+    if (!delete{{camel name}}ById) throw new HttpException(409, "{{camel name}} doesn't exist");
+
+    return delete{{camel name}}ById;
+  }
+}

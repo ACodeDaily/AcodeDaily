@@ -1,0 +1,11 @@
+import { Schema, model, Document } from 'mongoose';
+import { {{camel name}} } from '@interfaces/{{name}}.interface';
+
+const {{name}}Schema: Schema = new Schema({
+  dummy: {
+    type: String,
+    required: true,
+  },
+});
+ 
+export const {{camel name}}Model = model<{{camel name}} & Document>('{{camel name}}', {{name}}Schema);
