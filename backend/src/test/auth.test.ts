@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 import request from 'supertest';
 import { App } from '@/app';
-import { CreateUserDto } from '@dtos/users.dto';
+import { CreateUserDto } from '@/dtos/user.dto';
 import { AuthRoute } from '@routes/auth.route';
 
 afterAll(async () => {

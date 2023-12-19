@@ -12,6 +12,10 @@ export const ErrorMiddleware = (error: HttpException, req: Request, res: Respons
     const logMessage = `[${req.method}] ${req.path} >> StatusCode:: ${status}, Message:: ${message}${stack ? `, Stack:: ${stack}` : ''}`;
     logger.error(logMessage);
 
+    // NODE_ENV  = development, then show console.error
+    /* eslint-disable no-console */
+    console.error(logMessage);
+
     const response = {
       status: 'fail',
       message,

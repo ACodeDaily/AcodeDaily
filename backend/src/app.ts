@@ -10,9 +10,11 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS } from '@config';
 import { dbConnection } from '@database';
-import { Routes } from '@interfaces/routes.interface';
+import { Routes } from '@/interfaces/route.interface';
 import { ErrorMiddleware } from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
+import '@utils/passport';
+import passport from 'passport';
 
 export class App {
   public app: express.Application;
@@ -57,6 +59,7 @@ export class App {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
+    this.app.use(passport.initialize());
   }
 
   private initializeRoutes(routes: Routes[]) {

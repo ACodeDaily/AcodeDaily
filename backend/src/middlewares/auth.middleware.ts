@@ -1,11 +1,11 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Response, Request } from 'express';
 import { verify } from 'jsonwebtoken';
 import { SECRET_KEY } from '@config';
 import { HttpException } from '@exceptions/HttpException';
 import { DataStoredInToken, RequestWithUser } from '@interfaces/auth.interface';
-import { UserModel } from '@models/users.model';
+import { UserModel } from '@/models/user.model';
 
-const getAuthorization = req => {
+const getAuthorization = (req: Request) => {
   const coockie = req.cookies['Authorization'];
   if (coockie) return coockie;
 
@@ -35,4 +35,14 @@ export const AuthMiddleware = async (req: RequestWithUser, res: Response, next: 
   } catch (error) {
     next(new HttpException(401, 'Wrong authentication token'));
   }
+};
+
+export const RestrictTo = (...roles: string[]) => {
+  return (req: RequestWithUser, res: Response, next: NextFunction) => {
+    if (!roles.includes(req.user.role)) {
+      return next(new HttpException(403, 'You do not have permission to perform this action'));
+    }
+
+    next();
+  };
 };
