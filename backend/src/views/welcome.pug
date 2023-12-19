@@ -1,0 +1,67 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title= title
+    style.
+      /* Email styles */
+      body {
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        color: #333;
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 36px;
+        font-weight: bold;
+        letter-spacing: 3px;
+        margin: 30px 0;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: border-box;
+        background-color: #f5f5f5;
+      }
+      .header {
+        background-color: #003366;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+      }
+      .header h2 {
+        margin: 0;
+      }
+      .body {
+        padding: 30px 20px;
+      }
+      .footer {
+        background-color: #003366;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+      }
+      .footer a {
+        color: #fff;
+        text-decoration: none;
+      }
+    body
+      .container
+        .header
+          h2
+            a(href="#{url}", target="_blank") #{brand} Team
+        .body
+          p Dear #{username},
+          p Thank you for signing up for #{brand}! We're excited to have you on board.
+          p Your account has been created successfully. Please click on the link below and proceed further:
+          p
+            a(href="https://www.acodedaily.com", target="_blank") A code Daily
+          p If you did not sign up for #{brand}, please ignore this email.
+        .footer
+          p Regards,
+          p 
+            a(href="#{url}", target="_blank") #{brand} Team
