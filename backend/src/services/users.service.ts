@@ -1,7 +1,7 @@
 import { hash } from 'bcrypt';
 import { Service } from 'typedi';
 import { HttpException } from '@exceptions/HttpException';
-import { User } from '@/interfaces/user.interface';
+import { UpdateUser, UpdateUserRoles, User, UserFilter } from '@/interfaces/user.interface';
 import { UserModel } from '@/models/user.model';
 
 @Service()
@@ -28,19 +28,10 @@ export class UserService {
     return createUserData;
   }
 
-  public async updateUser(userId: string, userData: User): Promise<User> {
-    if (userData.email) {
-      const findUser: User = await UserModel.findOne({ email: userData.email });
-      if (findUser && findUser._id != userId) throw new HttpException(409, `This email ${userData.email} already exists`);
-    }
-
-    if (userData.password) {
-      const hashedPassword = await hash(userData.password, 10);
-      userData = { ...userData, password: hashedPassword };
-    }
-
-    const updateUserById: User = await UserModel.findByIdAndUpdate(userId, { userData });
-    if (!updateUserById) throw new HttpException(409, "User doesn't exist");
+  public async updateUser(userId: string, userData: UpdateUser): Promise<User> {
+    let updateQuery = UserModel.findByIdAndUpdate(userId, userData, { new: true });
+    if (userData.org) updateQuery = UserModel.findByIdAndUpdate(userId, { isVerified: false }, { new: true });
+    const updateUserById: User = await updateQuery;
 
     return updateUserById;
   }
@@ -50,5 +41,92 @@ export class UserService {
     if (!deleteUserById) throw new HttpException(409, "User doesn't exist");
 
     return deleteUserById;
+  }
+
+  public async verifyModerator(userId: string, adminId: string): Promise<User> {
+    const findUser: User = await UserModel.findById(userId);
+    if (!findUser) throw new HttpException(409, "User doesn't exist");
+
+    const updateUserById = await UserModel.findByIdAndUpdate(
+      userId,
+      {
+        role: ['moderator'],
+        verifiedBy: adminId,
+        isVerified: true,
+      },
+      {
+        new: true,
+      },
+    );
+
+    if (!updateUserById) throw new HttpException(409, "User doesn't exist");
+
+    return updateUserById;
+  }
+
+  public async verifyReferrer(userId: string, adminOrModId: string): Promise<User> {
+    const findUser: User = await UserModel.findById(userId);
+    if (!findUser) throw new HttpException(409, "User doesn't exist");
+
+    const updateUserById: User = await UserModel.findByIdAndUpdate(
+      userId,
+      { verifiedBy: adminOrModId, isVerified: true },
+      {
+        new: true,
+      },
+    );
+    if (!updateUserById) throw new HttpException(409, "User doesn't exist");
+
+    return updateUserById;
+  }
+
+  public async getReferrers(filter: UserFilter): Promise<User[]> {
+    let referrers: User[] = [];
+    let referrerQuery = UserModel.find({ role: { $in: ['referrer'] } });
+
+    if (filter.org) referrerQuery = referrerQuery.find({ org: filter.org });
+    if (filter.isVerified) referrerQuery = referrerQuery.find({ isVerified: filter.isVerified });
+    if (filter.sort) referrerQuery = referrerQuery.sort({ createdAt: filter.sort });
+    if (filter.totalReferred) referrerQuery = referrerQuery.sort({ totalReferred: filter.totalReferred });
+
+    referrers = await referrerQuery;
+    return referrers;
+  }
+
+  public async getModerators(filter: UserFilter): Promise<User[]> {
+    let referrers: User[] = [];
+    let referrerQuery = UserModel.find({ role: { $in: ['moderator'] } });
+
+    if (filter.org) referrerQuery = referrerQuery.find({ org: filter.org });
+    if (filter.isVerified) referrerQuery = referrerQuery.find({ isVerified: filter.isVerified });
+    if (filter.sort) referrerQuery = referrerQuery.sort({ createdAt: filter.sort });
+    if (filter.totalReferred) referrerQuery = referrerQuery.sort({ totalReferred: filter.totalReferred });
+
+    referrers = await referrerQuery;
+    return referrers;
+  }
+
+  public async getModeratorById(moderatorId: string): Promise<User> {
+    const findModerator: User = await UserModel.findOne({ _id: moderatorId }).populate('activities').populate({
+      path: 'verifiedBy',
+      select: 'username role',
+    });
+    if (!findModerator) throw new HttpException(409, "Moderator doesn't exist");
+    return findModerator;
+  }
+
+  public async getReferrerById(referrerId: string): Promise<User> {
+    const findReferrer: User = await UserModel.findOne({ _id: referrerId }).populate('activities').populate({
+      path: 'verifiedBy',
+      select: 'username role',
+    });
+    if (!findReferrer) throw new HttpException(409, "Referrer doesn't exist");
+    return findReferrer;
+  }
+
+  public async updateRoles(userId: string, userData: UpdateUserRoles): Promise<User> {
+    const updatedUser = await UserModel.findByIdAndUpdate(userId, userData, { new: true });
+    if (!updatedUser) throw new HttpException(409, "User doesn't exist");
+    return updatedUser;
   }
 }

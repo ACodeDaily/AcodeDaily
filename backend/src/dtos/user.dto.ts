@@ -1,5 +1,9 @@
-import { IsEmail, IsString, IsNotEmpty, MinLength, MaxLength, IsNumber } from 'class-validator';
+import { IsEmail, IsString, IsNotEmpty, MinLength, MaxLength, IsNumber, IsEnum, IsArray, IsOptional } from 'class-validator';
 
+enum UpdateUserRoles {
+  Moderator = 'moderator',
+  Referrer = 'referrer',
+}
 export class SignupUserDto {
   @IsEmail()
   public email: string;
@@ -25,6 +29,10 @@ export class SignupUserDto {
   @IsNumber()
   @IsNotEmpty()
   public otp: number;
+
+  @IsString()
+  @IsNotEmpty()
+  public org: string;
 }
 
 export class LoginUserDto {
@@ -37,14 +45,25 @@ export class LoginUserDto {
 }
 
 export class UpdateUserDto {
+  @IsOptional()
   @IsString()
   @IsNotEmpty()
   public firstName: string;
 
+  @IsOptional()
   @IsString()
   @IsNotEmpty()
   public lastName: string;
 
-  @IsEmail()
-  public email: string;
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  public org: string;
+}
+
+export class UpdateUserRolesDto {
+  @IsArray()
+  @IsNotEmpty()
+  @IsEnum(UpdateUserRoles, { each: true })
+  public role: string;
 }

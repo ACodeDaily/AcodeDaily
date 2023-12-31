@@ -6,3 +6,7 @@ export const Mail = {
   OTPSubject: 'OTP for A Code Daily',
   WelcomeSubject: 'Welcome to A Code Daily',
 };
+
+export const Constants = {
+  oneDay: 1,
+};

@@ -1,5 +1,7 @@
-import { model, Schema, Document } from 'mongoose';
+import mongoose, { model, Schema, Document } from 'mongoose';
 import { User } from '@/interfaces/user.interface';
+
+const { ObjectId } = mongoose.Schema.Types;
 
 const UserSchema: Schema = new Schema(
   {
@@ -30,13 +32,30 @@ const UserSchema: Schema = new Schema(
       type: String,
     },
     role: {
-      type: String,
+      type: [String],
       enum: ['referrer', 'moderator', 'admin'],
       default: 'referrer',
     },
-    organization: {
+    org: {
       type: String,
       default: 'none',
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verifiedBy: {
+      type: ObjectId,
+      ref: 'User',
+    },
+    totalReferred: {
+      type: Number,
+      default: 0,
+    },
+    activities: {
+      type: [ObjectId],
+      ref: 'Activity',
+      default: [],
     },
   },
   { timestamps: true },

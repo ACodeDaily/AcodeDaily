@@ -6,6 +6,9 @@ const {{name}}Schema: Schema = new Schema({
     type: String,
     required: true,
   },
-});
+},
+ {
+    timestamps: true,
+  },);
  
 export const {{camel name}}Model = model<{{camel name}} & Document>('{{camel name}}', {{name}}Schema);
