@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
-import { CreateSecret, Secret } from '@interfaces/secret.interface';
+import { CreateSecret, Secret, VerifySecret } from '@interfaces/secret.interface';
 import { SecretService } from '@services/secret.service';
 
 export class SecretController {
@@ -18,7 +18,7 @@ export class SecretController {
 
   public verifySecret = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { token, cfUserName }: CreateSecret = req.body;
+      const { token, cfUserName }: VerifySecret = req.body;
       const findOneSecretData: Secret = await this.secret.findSecret({ token, cfUserName });
 
       res.status(200).json({ data: findOneSecretData, message: 'findOne' });

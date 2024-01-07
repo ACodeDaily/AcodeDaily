@@ -7,11 +7,13 @@ import { SecretModel } from '@/models/secret.model';
 import { Member, UpdateMember, MemberFilter } from '@interfaces/member.interface';
 import { CreateActivity } from '@/interfaces/activity.interface';
 import { Helper } from '@utils/helper';
+import { DiscordBot } from '@utils/discord';
 import { Container } from 'typedi';
 
 @Service()
 export class MemberService {
   public helper = Container.get(Helper);
+  public bot = Container.get(DiscordBot);
 
   public async findAllMembers(filter: MemberFilter, role: string[], org: string): Promise<Member[]> {
     let members: Member[] = [];
@@ -63,15 +65,15 @@ export class MemberService {
     return createMemberData;
   }
 
-  public async updateMemberStatus(memberId: string, referrerId, memberData: UpdateMember): Promise<Member> {
+  public async updateMemberStatus(memberId: string, referrerId: string, memberData: UpdateMember): Promise<Member> {
     const isMemberExist = await MemberModel.findOne({ _id: memberId });
     if (!isMemberExist) throw new HttpException(409, "Member doesn't exist");
     if (isMemberExist.status === 'accepted' || isMemberExist.status === 'rejected')
       throw new HttpException(409, 'Member application already resolved');
-    let updateMemberById: Member = await MemberModel.findByIdAndUpdate(memberId, memberData);
+    let updateMemberById = await MemberModel.findByIdAndUpdate(memberId, memberData);
+    const secret = await SecretModel.findOne({ cfUserName: updateMemberById.cfUserName });
     if (!updateMemberById) throw new HttpException(409, "Member doesn't exist");
     const count = memberData.status === 'accepted' ? 1 : 0;
-    this.helper.sendStatusUpdateToDiscord(updateMemberById);
     const activityData: CreateActivity = this.getActivityData(updateMemberById, memberData);
     const activity = await ActivityModel.create(activityData);
     const updatedUser = await UserModel.findByIdAndUpdate(
@@ -81,6 +83,7 @@ export class MemberService {
     );
 
     updateMemberById = await MemberModel.findByIdAndUpdate(memberId, { $push: { activities: activity } }, { new: true });
+    await this.bot.sendDMToUser(secret.discordId, updateMemberById.status);
     if (!updatedUser) throw new HttpException(409, "Referrer doesn't exist");
     return updateMemberById;
   }

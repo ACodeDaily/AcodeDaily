@@ -7,3 +7,4 @@ export const { DB_PASSWORD } = process.env;
 export const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL } = process.env;
 export const { SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD } = process.env;
 export const { ACCESS_KEY_ID, SECRET_KEY_ID } = process.env;
+export const { BOT_TOKEN } = process.env;

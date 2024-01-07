@@ -5,6 +5,7 @@ import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
+import Container from 'typedi';
 import morgan from 'morgan';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
@@ -13,6 +14,7 @@ import { dbConnection } from '@database';
 import { Routes } from '@/interfaces/route.interface';
 import { ErrorMiddleware } from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
+import { DiscordBot } from '@utils/discord';
 import '@utils/passport';
 import passport from 'passport';
 
@@ -31,6 +33,7 @@ export class App {
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
+    this.initBot();
   }
 
   public listen() {
@@ -86,5 +89,10 @@ export class App {
 
   private initializeErrorHandling() {
     this.app.use(ErrorMiddleware);
+  }
+
+  private async initBot() {
+    const bot = Container.get(DiscordBot);
+    await bot.sendDMToUser('844623517370810439i', 'test');
   }
 }

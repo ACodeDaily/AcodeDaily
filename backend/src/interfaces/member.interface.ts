@@ -1,3 +1,5 @@
+import { Secret } from './secret.interface';
+
 export interface Member {
   _id?: string;
   name: string;
@@ -14,7 +16,7 @@ export interface Member {
   updatedAt?: Date;
   status?: string;
   referrerResponse?: string;
-  secretId?: string;
+  secretId?: Secret | string;
 }
 
 export interface UpdateMember {

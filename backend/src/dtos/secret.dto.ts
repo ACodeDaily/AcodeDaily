@@ -12,4 +12,8 @@ export class CreateSecretDto {
   @MinLength(1)
   @MaxLength(256)
   public token: string;
+
+  @IsString()
+  @IsNotEmpty()
+  public discordId: string;
 }

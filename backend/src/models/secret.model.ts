@@ -21,6 +21,10 @@ const secretSchema: Schema = new Schema(
       type: Date,
       default: Date.now,
     },
+    discordId: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

@@ -1,7 +1,7 @@
 import Container, { Service } from 'typedi';
 import { HttpException } from '@exceptions/HttpException';
 import { SecretModel } from '@models/secret.model';
-import { CreateSecret, Secret } from '@interfaces/secret.interface';
+import { CreateSecret, Secret, VerifySecret } from '@interfaces/secret.interface';
 import { Helper } from '@/utils/helper';
 import { Constants } from '@/utils/constants';
 
@@ -14,7 +14,7 @@ export class SecretService {
     return secrets;
   }
 
-  public async findSecret(data: CreateSecret): Promise<Secret> {
+  public async findSecret(data: VerifySecret): Promise<Secret> {
     const findSecret: Secret = await SecretModel.findOne(data);
 
     if (!findSecret) throw new HttpException(409, 'Wrong token or username ');
@@ -28,22 +28,25 @@ export class SecretService {
 
   public async createSecret(secretData: CreateSecret): Promise<Secret> {
     const presentDate = new Date();
-    const thisMonth = presentDate.getMonth();
+    const thisMonth = presentDate.getMonth() + 1;
     const thisYear = presentDate.getFullYear();
 
     const findSecretData = await SecretModel.findOne({ cfUserName: secretData.cfUserName });
+    const key = `${thisMonth}_${thisYear}`;
 
     if (findSecretData) {
-      const key = `${thisMonth}${thisYear}`;
-      const request: number = findSecretData.date.get(key);
+      const request: number = findSecretData.date.get(key) || 0;
 
       if (request > 7) {
         throw new HttpException(409, 'You have reached the limit of requests for this month');
       }
+
       const updateSecretData: Secret = await SecretModel.findByIdAndUpdate(
         findSecretData._id,
         {
-          date: { [key]: request + 1 },
+          $set: {
+            [`date.${key}`]: request + 1,
+          },
           token: secretData.token,
           tokenIssuedAt: Date.now(),
         },
@@ -52,7 +55,7 @@ export class SecretService {
       return updateSecretData;
     }
 
-    const createSecretData: Secret = await SecretModel.create({ ...secretData, date: { [`${thisMonth}${thisYear}`]: 1 } });
+    const createSecretData: Secret = await SecretModel.create({ ...secretData, date: { [key]: 1 } });
 
     return createSecretData;
   }

@@ -5,6 +5,9 @@ export const dbConnection = async () => {
   const dbConfig = {
     url: `mongodb+srv://shubhamjr:${DB_PASSWORD}@cluster0.72jmhwi.mongodb.net/?retryWrites=true&w=majority`,
   };
+  // const dbConfig = {
+  //   url: `mongodb://localhost:27017/acd`,
+  // };
 
   if (NODE_ENV !== 'production') {
     set('debug', true);

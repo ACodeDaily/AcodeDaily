@@ -2,6 +2,7 @@ export interface Secret {
   _id?: string;
   token: string;
   cfUserName: string;
+  discordId: string;
   date: Map<string, number>;
   updatedAt?: Date;
   tokenIssuedAt?: Date;
@@ -10,6 +11,12 @@ export interface Secret {
 export interface CreateSecret {
   cfUserName: string;
   token: string;
+  discordId: string;
+}
+
+export interface VerifySecret {
+  token: string;
+  cfUserName: string;
 }
 
 export interface GetSecret {
